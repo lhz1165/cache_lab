@@ -6,7 +6,4 @@ set(CMAKE_C_STANDARD 11)
 
 
 include_directories(.)
-add_executable(csim cachelab.c  csim.c
-        hashmap.c
-        hashmap.h
-)
+add_executable(csim cachelab.c  csim.c)

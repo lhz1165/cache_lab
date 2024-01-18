@@ -26,7 +26,7 @@ typedef struct {
 } LRUCache;
 LRUCache* lRUCacheCreate(int capacity);
 
-void lRUCachePut(LRUCache* obj, int key, int value);
+void lRUCachePut(LRUCache* obj, int key, int value,int *deleteKey);
 
 void lRUCacheFree(LRUCache* obj);
 

@@ -60,14 +60,16 @@ int lRUCacheGet(LRUCache* obj, int key) {
     }
     return -1;
 }
-void lRUCachePut(LRUCache* obj, int key, int value) {
+void lRUCachePut(LRUCache* obj, int key, int value,int *deleteKey) {
     Hash* addr = HashMap(obj->table, key, obj->capacity);//取得哈希地址
     if (lRUCacheGet(obj, key) == -1)
     {
+        //没找到key，并且lru满了
         if (obj->size>= obj->capacity)
         {
             LinkList last = obj->tail->pre->pre;
             LinkList del = last->next;
+            *deleteKey=del->key;
             last->next = obj->tail;
             obj->tail->pre = last;
             Hash *delt = HashMap(obj->table,del->key,obj->capacity);//找到要删除的地址
@@ -107,6 +109,7 @@ void lRUCachePut(LRUCache* obj, int key, int value) {
     }
     else
     {
+        //找到key，直接移动到前面
         obj->head->next->val = value;//替换数据值
     }
 }

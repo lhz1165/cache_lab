@@ -1,7 +1,19 @@
+s= 2^4 e=2^1 b=2^4
 L 10,1
+tag:0 setIndex:1  blockindex:0           miss              (1,0)(2,0)
 M 20,1
+tag:0 setIndex:2  blockindex:0       miss
+tag:0 setIndex:2  blockindex:0        hit
 L 22,1
+tag:0 setIndex:2  blockindex:2         hit
 S 18,1
+tag:0 setIndex:1  blockindex:8        hit
 L 110,1
+tag:1 setIndex:1  blockindex:0        miss evic
 L 210,1
+tag:2 setIndex:1  blockindex:0        miss evic
 M 12,1
+tag:0 setIndex:1  blockindex:2         miss evic
+tag:0 setIndex:1  blockindex:2          hit
+
+4hit  5miss 3evice
