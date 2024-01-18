@@ -63,6 +63,13 @@ build CMakeFiles/csim.dir/csim.c.obj: C_COMPILER__csim_unscanned_Debug D$:/c/cac
   OBJECT_DIR = CMakeFiles\csim.dir
   OBJECT_FILE_DIR = CMakeFiles\csim.dir
 
+build CMakeFiles/csim.dir/trans.c.obj: C_COMPILER__csim_unscanned_Debug D$:/c/cache-lab/trans.c || cmake_object_order_depends_target_csim
+  DEP_FILE = CMakeFiles\csim.dir\trans.c.obj.d
+  FLAGS = -g -std=gnu11 -fdiagnostics-color=always
+  INCLUDES = -ID:/c/cache-lab/.
+  OBJECT_DIR = CMakeFiles\csim.dir
+  OBJECT_FILE_DIR = CMakeFiles\csim.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target csim
@@ -71,7 +78,7 @@ build CMakeFiles/csim.dir/csim.c.obj: C_COMPILER__csim_unscanned_Debug D$:/c/cac
 #############################################
 # Link the executable csim.exe
 
-build csim.exe: C_EXECUTABLE_LINKER__csim_Debug CMakeFiles/csim.dir/cachelab.c.obj CMakeFiles/csim.dir/csim.c.obj
+build csim.exe: C_EXECUTABLE_LINKER__csim_Debug CMakeFiles/csim.dir/cachelab.c.obj CMakeFiles/csim.dir/csim.c.obj CMakeFiles/csim.dir/trans.c.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\csim.dir
