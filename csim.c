@@ -149,8 +149,6 @@ int main(int argc, char *argv[]) {
 CACHE *initCache(int s, int e, int b) {
     CACHE *myCache = (CACHE *) malloc(sizeof(CACHE));
     myCache->setNum = 0;
-    CACHE_SET *myCacheSet[s];
-    CACHE_SET_LINE *myLine[e];
 
     for (int i = 0; i < 1ULL << s; ++i) {
         CACHE_SET *cs = (CACHE_SET *) malloc(sizeof(CACHE_SET));
@@ -311,13 +309,13 @@ LRUCache* lRUCacheCreate(int capacity) {
 }
 int lRUCacheGet(LRUCache* obj, int key) {
     Hash* addr = HashMap(obj->table, key, obj->capacity);//取得哈希地址
-    addr = addr->next;//跳过头结点
+    addr = (Hash *) addr->next;//跳过头结点
     if (addr == NULL){
         return -1;
     }
     while ( addr->next != NULL && addr->store->key != key)
     {//寻找密钥是否存在
-        addr = addr->next;
+        addr = (Hash *) addr->next;
     }   if (addr->store->key == key)
     {//查找成功
         HeadInsertion(obj->head, addr->store);//更新至表头
@@ -339,11 +337,11 @@ void lRUCachePut(LRUCache* obj, int key, int value,int *deleteKey) {
             obj->tail->pre = last;
             Hash *delt = HashMap(obj->table,del->key,obj->capacity);//找到要删除的地址
             Hash *help_delt = delt;
-            delt = delt->next;
+            delt = (Hash *)delt->next;
             while(delt->store->key != del->key)
             {
                 help_delt = delt;//删除的前一个节点
-                delt = delt->next;
+                delt = (Hash *) delt->next;
             }
             help_delt->next = delt->next;
             delt->store = NULL;
@@ -352,7 +350,7 @@ void lRUCachePut(LRUCache* obj, int key, int value,int *deleteKey) {
 
             Hash * new_insert = (Hash*)malloc(sizeof(Hash));
             new_insert->next = addr->next;
-            addr->next = new_insert;
+            addr->next = (LinkList *) new_insert;
             new_insert->store = del;
             del->key = key;
             del->val=value;
@@ -363,7 +361,7 @@ void lRUCachePut(LRUCache* obj, int key, int value,int *deleteKey) {
             Hash* new_node = (Hash *)malloc(sizeof(Hash));
             new_node->store = (LinkList)malloc(sizeof(Node));
             new_node->next = addr->next;
-            addr->next = new_node;
+            addr->next = (LinkList *) new_node;
             new_node->store->pre  = NULL;
             new_node->store->next = NULL;
             new_node->store->val  = value;
