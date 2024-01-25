@@ -6,36 +6,60 @@
  *
  * A transpose function is evaluated by counting the number of misses
  * on a 1KB direct mapped cache with a block size of 32 bytes.
- */ 
+ */
 #include <stdio.h>
 #include "cachelab.h"
+//cache 32个 每个32B
 
 int is_transpose(int M, int N, int A[N][M], int B[M][N]);
+//0 1 2 3 4 5 6 7|8 9 10 11 12 13 14 15|16 17 18 19 20 21 22 23|24 25 26 27 28 29 30 31   4个cache块
+//0 1 2 3 4 5 6 7|8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31
+//...
+//0 1 2 3 4 5 6 7|8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31   8行塞满cache
 
-/* 
+/*
  * transpose_submit - This is the solution transpose function that you
  *     will be graded on for Part B of the assignment. Do not change
  *     the description string "Transpose submission", as the driver
  *     searches for that string to identify the transpose function to
  *     be graded. 
  */
+//
 char transpose_submit_desc[] = "Transpose submission";
-void transpose_submit(int M, int N, int A[N][M], int B[M][N])
-{
 
+void transpose_submit(int M, int N, int A[N][M], int B[M][N]) {
+    for (int ii = 0; ii < M; ii += 8) {
+        for (int jj = 0; jj < N ; jj += 8) {
+            //当A 加载cache小块0号-> B->0 4 8 12 16 20 24 28
+            //由于A的0和B的0块 冲突了
+            int flag = 0;
+            if (ii == jj) {
+                flag = 1;
+            }
+            for (int i = ii; i < ii + 8; ++i) {
+                for (int j = jj; j < jj+8; ++j) {
+                    if (flag==0) {
+                        B[j][i]=A[i][j];
+                    } else{
+
+                    }
+                }
+            }
+        }
+    }
 }
 
 /* 
  * You can define additional transpose functions below. We've defined
  * a simple one below to help you get started. 
- */ 
+ */
 
 /* 
  * trans - A simple baseline transpose function, not optimized for the cache.
  */
 char trans_desc[] = "Simple row-wise scan transpose";
-void trans(int M, int N, int A[N][M], int B[M][N])
-{
+
+void trans(int M, int N, int A[N][M], int B[M][N]) {
     int i, j, tmp;
 
     for (i = 0; i < N; i++) {
@@ -43,7 +67,7 @@ void trans(int M, int N, int A[N][M], int B[M][N])
             tmp = A[i][j];
             B[j][i] = tmp;
         }
-    }    
+    }
 
 }
 
@@ -54,13 +78,12 @@ void trans(int M, int N, int A[N][M], int B[M][N])
  *     performance. This is a handy way to experiment with different
  *     transpose strategies.
  */
-void registerFunctions()
-{
+void registerFunctions() {
     /* Register your solution function */
-    registerTransFunction(transpose_submit, transpose_submit_desc); 
+    registerTransFunction(transpose_submit, transpose_submit_desc);
 
     /* Register any additional transpose functions */
-    registerTransFunction(trans, trans_desc); 
+    registerTransFunction(trans, trans_desc);
 
 }
 
@@ -69,8 +92,7 @@ void registerFunctions()
  *     A. You can check the correctness of your transpose by calling
  *     it before returning from the transpose function.
  */
-int is_transpose(int M, int N, int A[N][M], int B[M][N])
-{
+int is_transpose(int M, int N, int A[N][M], int B[M][N]) {
     int i, j;
 
     for (i = 0; i < N; i++) {

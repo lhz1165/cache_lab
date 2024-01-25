@@ -6,5 +6,4 @@ set(CMAKE_C_STANDARD 11)
 
 
 include_directories(.)
-add_executable(csim cachelab.c  csim.c
-        trans.c)
+add_executable(csim cachelab.c trans.c tracegen.c)
