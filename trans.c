@@ -28,25 +28,78 @@ int is_transpose(int M, int N, int A[N][M], int B[M][N]);
 char transpose_submit_desc[] = "Transpose submission";
 
 void transpose_submit(int M, int N, int A[N][M], int B[M][N]) {
-    for (int ii = 0; ii < M; ii += 8) {
-        for (int jj = 0; jj < N ; jj += 8) {
+    for (int ii = 0; ii < N; ii += 8) {
+        for (int jj = 0; jj < M; jj += 8) {
             //当A 加载cache小块0号-> B->0 4 8 12 16 20 24 28
             //由于A的0和B的0块 冲突了
-            int flag = 0;
             if (ii == jj) {
-                flag = 1;
-            }
-            for (int i = ii; i < ii + 8; ++i) {
-                for (int j = jj; j < jj+8; ++j) {
-                    if (flag==0) {
-                        B[j][i]=A[i][j];
-                    } else{
+                for (int i = ii; i < ii + 8; ++i) {
+                    if (i >= N) {
+                        continue;
+                    }
+                    int a1, a2 = 0, a3 = 0, a4 = 0, a5 = 0, a6 = 0, a7 = 0, a8 = 0;
+                    a1 = A[i][jj];
+                    if (jj + 1 < M) {
+                        a2 = A[i][jj + 1];
+                    }
+                    if (jj + 2 < M) {
+                        a3 = A[i][jj + 2];
+                    }
+                    if (jj + 3 < M) {
+                        a4 = A[i][jj + 3];
+                    }
+                    if (jj + 4 < M) {
+                        a5 = A[i][jj + 4];
+                    }
+                    if (jj + 5 < M) {
+                        a6 = A[i][jj + 5];
+                    }
+                    if (jj + 6 < M) {
+                        a7 = A[i][jj + 6];
+                    }
+                    if (jj + 7 < M) {
+                        a8 = A[i][jj + 7];
+                    }
 
+                    for (int j = jj; j < jj + 8; j += 8) {
+                        B[jj][i] = a1;
+                        if (jj + 1 < M) {
+                            B[jj + 1][i] = a2;
+                        }
+                        if (jj + 2 < M) {
+                            B[jj + 2][i] = a3;
+                        }
+                        if (jj + 3 < M) {
+                            B[jj + 3][i] = a4;
+                        }
+                        if (jj + 4 < M) {
+                            B[jj + 4][i] = a5;
+                        }
+                        if (jj + 5 < M) {
+                            B[jj + 5][i] = a6;
+                        }
+                        if (jj + 6 < M) {
+                            B[jj + 6][i] = a7;
+                        }
+                        if (jj + 7 < M) {
+                            B[jj + 7][i] = a8;
+                        }
+                    }
+                }
+            } else {
+                for (int i = ii; i < ii + 8; ++i) {
+                    for (int j = jj; j < jj + 8; ++j) {
+                        if (j >= M || i >= N) {
+                            continue;
+                        }
+                        B[j][i] = A[i][j];
                     }
                 }
             }
         }
     }
+
+
 }
 
 /* 
